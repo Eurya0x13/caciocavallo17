@@ -95,33 +95,13 @@ public class CTCScreen implements PlatformScreen {
     }
 
     private static int[] dataBufAux;
-    public static int[] getCurrentScreenRGB(/* long nativeCanvas, int width, int height */) {
-      /*
-        if (instance.screenBuffer.getWidth() != width || instance.screenBuffer.getHeight() != height) {
-        }
-      */
-        // mAndroidCanvas.updateCanvas(nativeCanvas);
-        // currentRgbArray = return instance.screenBuffer.getRGB(0, 0, width, height, null, 0, width);
-        // mAndroidCanvas.drawBitmap(currentRgbArray, 0, width, 0, 0, width, height, true, null);
-        /*
-        EventData ed = new EventData();
-	ed.setSource(instance);
-        ed.setUpdateRect(new Rectangle(FullScreenWindowFactory.getScreenDimension()));
-        ed.setId(PaintEvent.UPDATE);
-        CTCEventSource.getInstance().postEvent(ed);
-        ed=null;
-        */
+    public static int[] getCurrentScreenRGB() {
         if (instance.screenBuffer == null) {
             return null;
         } else {
-            //dataBufAux=((DataBufferInt)(instance.screenBuffer.getRaster().getDataBuffer())).getData();
             if(dataBufAux == null) {
 		dataBufAux=new int[((int) FullScreenWindowFactory.getScreenDimension().getWidth()) * (int) FullScreenWindowFactory.getScreenDimension().getHeight()];
 	    }
-            /*instance.screenBuffer.getRGB(0, 0,
-                (int) FullScreenWindowFactory.getScreenDimension().getWidth(),
-                (int) FullScreenWindowFactory.getScreenDimension().getHeight(),
-                dataBufAux, 0, (int) FullScreenWindowFactory.getScreenDimension().getWidth());*/
             instance.screenBuffer.getRaster().getDataElements(0,0,
                 (int) FullScreenWindowFactory.getScreenDimension().getWidth(),
                 (int) FullScreenWindowFactory.getScreenDimension().getHeight(),
@@ -132,14 +112,11 @@ public class CTCScreen implements PlatformScreen {
     }
 
     static {
-        // Load it to get JavaVM instance
-        // System.loadLibrary("pojavexec");
-
         try {
             File currLibFile;
             for (String ldLib : System.getenv("LD_LIBRARY_PATH").split(":")) {
                 if (ldLib.isEmpty()) continue;
-                currLibFile = new File(ldLib, "libpojavexec_awt.so");
+                currLibFile = new File(ldLib, "libmy_awt.so");
                 if (currLibFile.exists()) {
                     System.load(currLibFile.getAbsolutePath());
                     break;
